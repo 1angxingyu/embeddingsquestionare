@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究任务</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .description-container {
+            margin: 30px 0;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .description-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .input-box {
+            width: calc(20% - 8px);
+            min-width: 120px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .highlight {
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>研究任务二</h1>
+            <p class="subtitle">（第4页，共5页）</p>
+        </div>
+
+        <form id="descriptionsForm">
+            <!-- 描述项会通过JavaScript动态生成 -->
+            <div id="descriptionsContainer"></div>
+
+            <div class="buttons">
+                <button type="button" class="submit-btn" onclick="nextPage()">填写完毕，进入下一项</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        AV.init({
+            appId: "iJtuT5WzVtKd6HgqkJqIchnX-gzGzoHsz",
+            appKey: "Yijol5btFLgj273ZcHqnNQBg",
+            serverURL: "https://ijtut5wz.lc-cn-n1-shared.com"
+        });
+
+        function nextPage() {
+            // 调试信息：检查 participantId
+            const participantId = localStorage.getItem('participantId');
+            console.log('ParticipantId:', participantId);
+
+            // 检查所有输入框是否已填写
+            const allInputs = document.querySelectorAll('.input-box');
+            console.log('Found inputs:', allInputs.length); // 调试信息：检查找到的输入框数量
+
+            let allFilled = true;
+            allInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allFilled = false;
+                }
+            });
+
+            if (allFilled) {
+                const UserResponse = AV.Object.extend('UserResponses');
+                const userResponse = new UserResponse();
+
+                // 收集所有描述的回答
+                const responses = {};
+                const descriptions = document.querySelectorAll('.description-container');
+                console.log('Found descriptions:', descriptions.length); // 调试信息：检查找到的描述数量
+                
+                descriptions.forEach((desc, descIndex) => {
+                    const title = desc.querySelector('.description-title').textContent;
+                    const inputs = desc.querySelectorAll('.input-box');
+                    const answers = Array.from(inputs).map(input => input.value);
+                    
+                    responses[`description_${descIndex + 1}`] = {
+                        question: title,
+                        answers: answers
+                    };
+                });
+
+                console.log('Collected responses:', responses); // 调试信息：检查收集到的数据
+
+                // 创建要保存的数据对象
+                const saveData = {
+                    participantId: participantId,
+                    pageType: 'descriptions',
+                    responses: responses,
+                    timestamp: new Date()
+                };
+
+                console.log('Saving data:', saveData); // 调试信息：检查要保存的数据
+
+                // 直接设置整个对象
+                userResponse.set(saveData);
+                
+                // 保存数据
+                userResponse.save().then((savedResponse) => {
+                    console.log('Data saved successfully', savedResponse);
+                    window.location.href = 'page5.html';
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('保存失败，请重试');
+                });
+            } else {
+                alert('请填写所有空格');
+            }
+        }
+
+        // 页面加载完成后检查初始化状态
+        window.onload = function() {
+            console.log('Page loaded');
+            console.log('AV initialized:', AV.applicationId !== undefined);
+            const participantId = localStorage.getItem('participantId');
+            console.log('Initial participantId:', participantId);
+        }
+    </script>
+</body>
+</html> 
