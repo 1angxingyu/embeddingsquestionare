@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究任务一</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .scale-container {
+            margin: 50px 0;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .scale-container:last-child {
+            border-bottom: none;
+        }
+
+        .scale-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .scale {
+            position: relative;
+            height: 2px;
+            background-color: #333;
+            margin: 40px 50px;
+        }
+
+        .scale::before, .scale::after, 
+        .scale-tick-1, .scale-tick-2, .scale-tick-3, .scale-tick-4 {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 10px;
+            background-color: #333;
+            top: -5px;
+        }
+
+        .scale::before {
+            left: 0;
+        }
+
+        .scale::after {
+            right: 0;
+        }
+
+        .scale-tick-1 {
+            left: 20%;
+        }
+
+        .scale-tick-2 {
+            left: 40%;
+        }
+
+        .scale-tick-3 {
+            left: 60%;
+        }
+
+        .scale-tick-4 {
+            left: 80%;
+        }
+
+        .scale-input {
+            position: absolute;
+            width: 120px;
+            padding: 5px;
+            border: none;
+            border-bottom: 1px solid #333;
+            text-align: center;
+            font-size: 16px;
+            background: transparent;
+        }
+
+        .scale-input.left {
+            left: -60px;
+            top: 15px;
+        }
+
+        .scale-input.right {
+            right: -60px;
+            top: 15px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        form {
+            margin-top: 30px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+    <script>
+        AV.init({
+            appId: "iJtuT5WzVtKd6HgqkJqIchnX-gzGzoHsz",
+            appKey: "Yijol5btFLgj273ZcHqnNQBg",
+            serverURL: "https://ijtut5wz.lc-cn-n1-shared.com"
+        });
+
+        function nextPage() {
+            const form = document.getElementById('scaleForm');
+            if (form.checkValidity()) {
+                const UserResponse = AV.Object.extend('UserResponses');
+                const userResponse = new UserResponse();
+                const participantId = localStorage.getItem('participantId');
+                
+                // 收集所有尺度值
+                const scaleInputs = document.querySelectorAll('.scale-input');
+                const scaleResponses = {};
+                
+                // 定义每对输入框对应的标题
+                const scaleTitles = [
+                    '年龄程度',  // 对应第1组左右端
+                    '有趣程度',  // 对应第2组左右端
+                    '危险程度',  // 对应第3组左右端
+                    '性别程度',  // 对应第4组左右端
+                    '智力程度',  // 对应第5组左右端
+                    '大小程度',  // 对应第6组左右端
+                    '温度程度',  // 对应第7组左右端
+                    '湿度程度',  // 对应第8组左右端
+                    '富有程度'   // 对应第9组左右端
+                ];
+
+                // 遍历每个输入框并保存数据
+                scaleInputs.forEach((input, index) => {
+                    const titleIndex = Math.floor(index / 2); // 确定当前是哪个标题
+                    const isRight = index % 2; // 0是左端，1是右端
+                    const key = `${scaleTitles[titleIndex]}${isRight ? '右端' : '左端'}`; // 例如："年龄程度左端"或"年龄程度右端"
+                    scaleResponses[key] = input.value;
+                });
+
+                const responseData = {
+                    participantId: participantId,
+                    pageType: 'scales',
+                    scaleResponses: scaleResponses,
+                    timestamp: new Date()
+                };
+
+                userResponse.set(responseData);
+                userResponse.save().then(() => {
+                    window.location.href = 'page4.html';
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('保存失败，请重试');
+                });
+            } else {
+                form.reportValidity();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>研究任务一</h1>
+            <p class="subtitle">（第3页，共5页）</p>
+        </div>
+
+        <form id="scaleForm" action="提交处理的地址" method="POST">
+            <!-- 年龄程度 -->
+            <div class="scale-container">
+                <div class="scale-title">年龄程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="age_left" required>
+                    <input type="text" class="scale-input right" name="age_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 有趣程度 -->
+            <div class="scale-container">
+                <div class="scale-title">有趣程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="interesting_left" required>
+                    <input type="text" class="scale-input right" name="interesting_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 危险程度 -->
+            <div class="scale-container">
+                <div class="scale-title">危险程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="danger_left" required>
+                    <input type="text" class="scale-input right" name="danger_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 性别程度 -->
+            <div class="scale-container">
+                <div class="scale-title">性别程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="gender_left" required>
+                    <input type="text" class="scale-input right" name="gender_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 智力程度 -->
+            <div class="scale-container">
+                <div class="scale-title">智力程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="intelligence_left" required>
+                    <input type="text" class="scale-input right" name="intelligence_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 大小程度 -->
+            <div class="scale-container">
+                <div class="scale-title">大小程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="size_left" required>
+                    <input type="text" class="scale-input right" name="size_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 温度程度 -->
+            <div class="scale-container">
+                <div class="scale-title">温度程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="temperature_left" required>
+                    <input type="text" class="scale-input right" name="temperature_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 湿度程度 -->
+            <div class="scale-container">
+                <div class="scale-title">湿度程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="humidity_left" required>
+                    <input type="text" class="scale-input right" name="humidity_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <!-- 富有程度 -->
+            <div class="scale-container">
+                <div class="scale-title">富有程度</div>
+                <div class="scale">
+                    <input type="text" class="scale-input left" name="wealth_left" required>
+                    <input type="text" class="scale-input right" name="wealth_right" required>
+                    <div class="scale-tick-1"></div>
+                    <div class="scale-tick-2"></div>
+                    <div class="scale-tick-3"></div>
+                    <div class="scale-tick-4"></div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="button" class="submit-btn" onclick="nextPage()">填写完毕，进入下一项</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html> 
