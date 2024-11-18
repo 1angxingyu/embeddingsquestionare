@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究任务二</title>
+    <script src="https://unpkg.com/leancloud-storage@4.12.0/dist/av-min.js"></script>
+    <script>
+        if (typeof AV === 'undefined') {
+            var script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js";
+            document.head.appendChild(script);
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .description-container {
+            margin-bottom: 30px;
+        }
+
+        .description-title {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .input-box {
+            width: calc(20% - 8px);
+            min-width: 120px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .highlight {
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>研究任务二</h1>
+            <p class="subtitle">（第4页，共5页）</p>
+        </div>
+
+        <div class="description">
+            <p>接下来，你的任务发生了变化，你会看到若干段描述，你需要填写你认为符合这段描述的东西，每段描述需要填写五个词（分别填在五个空里）</p>
+        </div>
+
+        <form id="descriptionsForm">
+            <div id="descriptionsContainer">
+                <!-- 这里将由 JavaScript 动态填充 -->
+            </div>
+
+            <div class="buttons">
+                <button type="button" onclick="nextPage()" class="submit-btn">填写完毕，进入下一项</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function initLeanCloud() {
+            if (typeof AV !== 'undefined') {
+                AV.init({
+                    appId: "iJtuT5WzVtKd6HgqkJqIchnX-gzGzoHsz",
+                    appKey: "Yijol5btFLgj273ZcHqnNQBg",
+                    serverURL: "https://ijtut5wz.lc-cn-n1-shared.com"
+                });
+                loadDescriptions();
+            } else {
+                setTimeout(initLeanCloud, 100);
+            }
+        }
+
+        function loadDescriptions() {
+            fetch('descriptions.json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Loaded data:', data);
+                    const container = document.getElementById('descriptionsContainer');
+                    let descriptionNumber = 1;
+
+                    data.forEach(item => {
+                        const divNeg = document.createElement('div');
+                        divNeg.className = 'description-container';
+                        divNeg.innerHTML = `
+                            <div class="description-title">${descriptionNumber}. 你认为最<span class="highlight">${item.negativeside}</span>的<span class="highlight">${item.Chinese_type}</span>有哪些？需要填写5个</div>
+                            <div class="input-group">
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_1" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_2" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_3" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_4" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_5" required>
+                            </div>
+                        `;
+                        container.appendChild(divNeg);
+                        descriptionNumber++;
+
+                        const divPos = document.createElement('div');
+                        divPos.className = 'description-container';
+                        divPos.innerHTML = `
+                            <div class="description-title">${descriptionNumber}. 你认为最<span class="highlight">${item.positiveside}</span>的<span class="highlight">${item.Chinese_type}</span>有哪些？需要填写5个</div>
+                            <div class="input-group">
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_1" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_2" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_3" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_4" required>
+                                <input type="text" class="input-box" name="desc${descriptionNumber}_5" required>
+                            </div>
+                        `;
+                        container.appendChild(divPos);
+                        descriptionNumber++;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading descriptions:', error);
+                    alert('加载描述失败，请刷新页面重试');
+                });
+        }
+
+        window.onload = initLeanCloud;
+
+        function nextPage() {
+            const form = document.getElementById('descriptionsForm');
+            if (form.checkValidity()) {
+                const UserResponse = AV.Object.extend('UserResponses');
+                const userResponse = new UserResponse();
+                const participantId = localStorage.getItem('participantId');
+
+                const responses = {};
+                const descriptions = document.querySelectorAll('.description-container');
+                
+                descriptions.forEach((desc, index) => {
+                    const title = desc.querySelector('.description-title').textContent;
+                    const inputs = desc.querySelectorAll('.input-box');
+                    const answers = Array.from(inputs).map(input => input.value.trim());
+                    
+                    responses[`description_${index + 1}`] = {
+                        question: title,
+                        answers: answers
+                    };
+                });
+
+                const saveData = {
+                    participantId: participantId,
+                    pageType: 'descriptions',
+                    responses: responses,
+                    timestamp: new Date()
+                };
+
+                userResponse.set(saveData);
+                userResponse.save().then(() => {
+                    window.location.href = 'page5.html';
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('保存失败，请重试');
+                });
+            } else {
+                alert('请填写所有空格');
+            }
+        }
+    </script>
+</body>
+</html> 
