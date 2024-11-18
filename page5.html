@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究结束</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px;
+            padding: 50px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .thank-you {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .message {
+            font-size: 18px;
+            color: #34495e;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            padding: 0 20px;
+        }
+
+        .signature {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+            color: #7f8c8d;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: "Arial", sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+            margin-top: 15px;
+            letter-spacing: 3px;
+        }
+
+        .decoration {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 30px;
+            }
+            
+            .thank-you {
+                font-size: 28px;
+            }
+            
+            .message {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>研究结束</h1>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" style="width: 100%"></div>
+        </div>
+        
+        <h1 class="thank-you">感谢您的参与！</h1>
+        
+        <div class="decoration"></div>
+        
+        <div class="message">
+            <p>非常感谢您抽出宝贵的时间参与本次研究。</p>
+            <p>您的回答对我们的研究非常重要，将为相关领域的发展提供宝贵的数据支持。</p>
+            <p>祝您生活愉快，学习进步！</p>
+        </div>
+        
+        <div class="signature">
+            <p>谢谢</p>
+            <div class="logo">----------YXY</div>
+        </div>
+    </div>
+</body>
+</html> 
