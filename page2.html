@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>研究任务</title>
+    <title>研究任务说明</title>
+    <!-- 添加 LeanCloud SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -203,6 +205,14 @@
             transform: translateY(-2px);
         }
     </style>
+    <script>
+        // 初始化 LeanCloud
+        AV.init({
+            appId: "iJtuT5WzVtKd6HgqkJqIchnX-gzGzoHsz",
+            appKey: "Yijol5btFLgj273ZcHqnNQBg",
+            serverURL: "https://ijtut5wz.lc-cn-n1-shared.com"
+        });
+    </script>
 </head>
 <body>
     <div class="container">

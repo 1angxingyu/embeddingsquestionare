@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>研究任务</title>
+    <title>研究任务二</title>
+    <!-- 添加 LeanCloud SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -94,25 +96,8 @@
             font-weight: bold;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>研究任务二</h1>
-            <p class="subtitle">（第4页，共5页）</p>
-        </div>
-
-        <form id="descriptionsForm">
-            <!-- 描述项会通过JavaScript动态生成 -->
-            <div id="descriptionsContainer"></div>
-
-            <div class="buttons">
-                <button type="button" class="submit-btn" onclick="nextPage()">填写完毕，进入下一项</button>
-            </div>
-        </form>
-    </div>
-
     <script>
+        // 初始化 LeanCloud
         AV.init({
             appId: "iJtuT5WzVtKd6HgqkJqIchnX-gzGzoHsz",
             appKey: "Yijol5btFLgj273ZcHqnNQBg",
@@ -191,5 +176,22 @@
             console.log('Initial participantId:', participantId);
         }
     </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>研究任务二</h1>
+            <p class="subtitle">（第4页，共5页）</p>
+        </div>
+
+        <form id="descriptionsForm">
+            <!-- 描述项会通过JavaScript动态生成 -->
+            <div id="descriptionsContainer"></div>
+
+            <div class="buttons">
+                <button type="button" class="submit-btn" onclick="nextPage()">填写完毕，进入下一项</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html> 
