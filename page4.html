@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究任务</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .description-container {
+            margin: 30px 0;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .description-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .input-box {
+            width: calc(20% - 8px);
+            min-width: 120px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .highlight {
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>研究任务二</h1>
+            <p class="subtitle">（第4页，共5页）</p>
+        </div>
+
+        <form id="descriptionsForm">
+            <!-- 描述项会通过JavaScript动态生成 -->
+            <div id="descriptionsContainer"></div>
+
+            <div class="buttons">
+                <button type="button" class="submit-btn" onclick="nextPage()">填写完毕，进入下一项</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // 加载JSON数据并生成描述项
+        fetch('descriptions.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('descriptionsContainer');
+                let descriptionNumber = 1;
+
+                data.forEach(item => {
+                    // 负面描述
+                    createDescriptionItem(
+                        container,
+                        descriptionNumber,
+                        `你认为最${item.negativeside}的${item.Chinese_type}有哪些？需要填写5个`
+                    );
+                    descriptionNumber++;
+
+                    // 正面描述
+                    createDescriptionItem(
+                        container,
+                        descriptionNumber,
+                        `你认为最${item.positiveside}的${item.Chinese_type}有哪些？需要填写5个`
+                    );
+                    descriptionNumber++;
+                });
+            });
+
+        function createDescriptionItem(container, number, text) {
+            const div = document.createElement('div');
+            div.className = 'description-container';
+            
+            // 处理文本，将"最"和动态字段用红色标出
+            const highlightedText = text.replace(
+                /(最|negativeside|positiveside|Chinese_type)/g, 
+                '<span class="highlight">$1</span>'
+            );
+            
+            div.innerHTML = `
+                <div class="description-title">${number}. ${text.replace(
+                    /最(.*?)的(.*?)有哪些/,
+                    '<span class="highlight">最$1</span>的<span class="highlight">$2</span>有哪些'
+                )}</div>
+                <div class="input-group">
+                    <input type="text" class="input-box" name="desc${number}_1" required>
+                    <input type="text" class="input-box" name="desc${number}_2" required>
+                    <input type="text" class="input-box" name="desc${number}_3" required>
+                    <input type="text" class="input-box" name="desc${number}_4" required>
+                    <input type="text" class="input-box" name="desc${number}_5" required>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function nextPage() {
+            const form = document.getElementById('descriptionsForm');
+            if (form.checkValidity()) {
+                // 保存数据到localStorage
+                const formData = new FormData(form);
+                const data = {};
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                localStorage.setItem('page4Data', JSON.stringify(data));
+                
+                window.location.href = 'page5.html';
+            } else {
+                alert('请填写所有必填项');
+                form.reportValidity();
+            }
+        }
+    </script>
+</body>
+</html> 

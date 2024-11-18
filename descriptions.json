@@ -1,0 +1,82 @@
+[
+  {
+    "Chinese_type": "衣服",
+    "negativeside": "年老,古老,老人",
+    "positiveside": "年轻,青春,小孩"
+  },
+  {
+    "Chinese_type": "职业",
+    "negativeside": "无趣,枯燥,乏味",
+    "positiveside": "有趣,乐趣,激动"
+  },
+  {
+    "Chinese_type": "运动",
+    "negativeside": "危险,致命,威胁",
+    "positiveside": "安全,无害,平静"
+  },
+  {
+    "Chinese_type": "职业",
+    "negativeside": "危险,致命,威胁",
+    "positiveside": "安全,无害,平静"
+  },
+  {
+    "Chinese_type": "城市",
+    "negativeside": "危险,致命,威胁",
+    "positiveside": "安全,无害,平静"
+  },
+  {
+    "Chinese_type": "动物",
+    "negativeside": "危险,致命,威胁",
+    "positiveside": "安全,无害,平静"
+  },
+  {
+    "Chinese_type": "运动",
+    "negativeside": "男,男性,男人",
+    "positiveside": "女,女性,女人"
+  },
+  {
+    "Chinese_type": "职业",
+    "negativeside": "男,男性,男人",
+    "positiveside": "女,女性,女人"
+  },
+  {
+    "Chinese_type": "衣服",
+    "negativeside": "男,男性,男人",
+    "positiveside": "女,女性,女人"
+  },
+  {
+    "Chinese_type": "动物",
+    "negativeside": "男,男性,男人",
+    "positiveside": "女,女性,女人"
+  },
+  {
+    "Chinese_type": "运动",
+    "negativeside": "聪明,智慧,明智",
+    "positiveside": "愚蠢,笨,傻"
+  },
+  {
+    "Chinese_type": "职业",
+    "negativeside": "聪明,智慧,明智",
+    "positiveside": "愚蠢,笨,傻"
+  },
+  {
+    "Chinese_type": "动物",
+    "negativeside": "小,微小,渺小",
+    "positiveside": "大,巨大,庞大"
+  },
+  {
+    "Chinese_type": "职业",
+    "negativeside": "贫穷,没钱,贫困",
+    "positiveside": "富有,有钱,富足"
+  },
+  {
+    "Chinese_type": "衣服",
+    "negativeside": "贫穷,没钱,贫困",
+    "positiveside": "富有,有钱,富足"
+  },
+  {
+    "Chinese_type": "动物",
+    "negativeside": "干燥,陆地,土地",
+    "positiveside": "湿润,水,海洋"
+  }
+]
